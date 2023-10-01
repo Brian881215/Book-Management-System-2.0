@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  demo:
+    build:
+      context:./
+      dockerfile: Dockerfile
+    image:demo:latest
+    container_name:demo
+    ports:
+      -8082:8085
+    networks:
+      - datahub_network
+  

@@ -13,6 +13,7 @@ import com.cathay.libraryManagement.platform.enums.ReturnCodeEnum;
 import com.cathay.libraryManagement.platform.model.Response;
 import com.cathay.libraryManagement.platform.service.impl.BookServiceImpl;
 
+
 @ControllerAdvice
 public class BookSystemExceptionHandler {
 	
@@ -36,8 +37,8 @@ public class BookSystemExceptionHandler {
 		StringBuilder stringBuilder = new StringBuilder();
 		if (bindingResult.hasErrors()) {
 	        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-	        	stringBuilder.append(fieldError.getDefaultMessage()+",");
-	        }
+	        	stringBuilder.append(String.join(fieldError.getDefaultMessage(),","));
+	        } 
 	    }
 		//去除掉最後一個error的","
 		CharSequence charErrorMessage = stringBuilder.subSequence(0, stringBuilder.length()-1);

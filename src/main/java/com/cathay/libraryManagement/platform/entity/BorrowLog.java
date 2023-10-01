@@ -16,7 +16,7 @@ import lombok.Setter;
 @Table(name="BORROW_LOG")
 @Getter
 @Setter
-public class BorrowLog { //這次沒有用到，未來功能完整版可以繼續撰寫
+public class BorrowLog {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

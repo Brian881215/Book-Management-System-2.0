@@ -1,5 +1,8 @@
 package com.cathay.libraryManagement.platform.enums;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public enum ReturnCodeEnum {
 	
 	E001("E001","交易失敗"),
@@ -10,10 +13,10 @@ public enum ReturnCodeEnum {
 	private String desc;
 	private String code;
 
-	ReturnCodeEnum(String code, String desc) {
-		this.setCode(code);
-		this.setDesc(desc);
-	}
+//	ReturnCodeEnum(String code, String desc) {
+//		this.setCode(code);
+//		this.setDesc(desc);
+//	}
 
 	public String getDesc() {
 		return desc;

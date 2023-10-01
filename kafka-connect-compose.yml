@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+  kafka-connect:
+    image: debezium/connect:1.7
+    container_name: kafka_connect
+    ports:
+      - "8083:8083"
+    environment:
+      BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9092,kafka3:9092
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: my_connect_configs
+      OFFSET_STORAGE_TOPIC: my_connect_offsets
+      STATUS_STORAGE_TOPIC: my_connect_statuses
+    networks:
+      - kafka-network
+  mysql:
+    image: 'mysql'
+    container_name: mysqltest
+    environment:
+      MYSQL_ROOT_PASSWORD: 00592228
+      MYSQL_DATABASE: BookSystem
+      MYSQL_USER: BrianHuang
+      MYSQL_PASSWORD: Brian1215
+    ports:
+      - "3306:3306"
+    networks:
+      - kafka-network
+
+networks:
+  kafka-network:
+    external: true

@@ -1,13 +1,16 @@
 package com.cathay.libraryManagement.platform.controller;
 
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.cathay.libraryManagement.platform.model.BookAddDTO;
 import com.cathay.libraryManagement.platform.model.BookDTO;
 import com.cathay.libraryManagement.platform.model.BookModifyDTO;
@@ -32,7 +35,7 @@ public class BookController {
         return ResponseEntity.ok(bookService.modifyBook(bookModifyDTO));
 	}
 	
-	@PostMapping(value = "/book/delete")
+	@DeleteMapping(value = "/book/delete")
 	public ResponseEntity<Response> deleteOneBook(@RequestParam(name = "book_ISBN")  String bookISBN){
         return ResponseEntity.ok(bookService.deleteBook(bookISBN));
 	}

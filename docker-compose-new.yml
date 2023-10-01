@@ -1,0 +1,70 @@
+version: '2'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - ./zookeeper-new-data:/var/lib/zookeeper/data
+      - ./zookeeper-new-log:/var/lib/zookeeper/log
+    networks:
+      - kafka-network
+  kafka1:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092
+#    volumes:
+#      - ./kafka1-data:/var/lib/kafka/data
+    ports:
+      - "9092:9092" # 主机的 9092 端口映射到 kafka1 容器的 9092 端口
+    networks:
+      - kafka-network
+  kafka2:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9092
+#    volumes:
+#      - ./kafka2-data:/var/lib/kafka/data
+    ports:
+      - "9093:9092"
+    networks:
+      - kafka-network
+  kafka3:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9092
+#    volumes:
+#      - ./kafka3-data:/var/lib/kafka/data
+    ports:
+      - "9094:9092"
+    networks:
+      - kafka-network
+volumes:
+  kafka1-data:
+    name: my_kafka1_data
+  kafka2-data:
+    name: my_kafka2_data
+  kafka3-data:
+    name: my_kafka3_data
+  zookeeper-new-data:
+    name: zookeeper_new_data
+  zookeeper-new-log:
+    name: zookeeper_new_log
+networks:
+  kafka-network:
+    external: true

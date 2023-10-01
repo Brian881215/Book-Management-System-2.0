@@ -1,10 +1,14 @@
 package com.cathay.libraryManagement.platform.model;
 
 import java.time.LocalDate;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 
-@Data
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class BookInfoDTO {
 
 	@JsonProperty("book_ISBN")

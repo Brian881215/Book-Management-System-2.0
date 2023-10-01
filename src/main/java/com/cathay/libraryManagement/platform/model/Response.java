@@ -1,9 +1,12 @@
 package com.cathay.libraryManagement.platform.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Response {
 	
 	public Response() {

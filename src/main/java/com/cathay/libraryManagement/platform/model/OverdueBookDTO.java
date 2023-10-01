@@ -1,10 +1,15 @@
 package com.cathay.libraryManagement.platform.model;
 
-import java.util.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class OverdueBookDTO { //這個要升冪排序
 	
 	@JsonProperty("MWHEADER")

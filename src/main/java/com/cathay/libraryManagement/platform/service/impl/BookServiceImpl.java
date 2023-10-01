@@ -1,7 +1,7 @@
 package com.cathay.libraryManagement.platform.service.impl;
 
-import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -53,7 +53,7 @@ public class BookServiceImpl implements BookService{
 		
 		return response;
 	}
-	
+	 
 	@Override
 	public Response addBook(BookAddDTO bookAddDTO) {
 			
@@ -127,7 +127,7 @@ public class BookServiceImpl implements BookService{
 				bookDTO.getBookList().addAll(bookInfosDTO);
 				queryCount += bookInfos.size();
 			}else {
-				if(bookInfo != null) {
+				if(bookInfo !=null) {
 					BookInfoDTO bookInfoDTO = new BookInfoDTO(); 
 					bookInfoDTO.setBookISBN(bookInfo.getBookISBN());
 					bookInfoDTO.setBookLanguage(bookInfo.getBookISBN());
@@ -150,14 +150,14 @@ public class BookServiceImpl implements BookService{
 			}	
 		}else if(type.equals(QueryTypeEnumManager.Status.getValue())) {
 			List<BookInfo> bookStatusInfos = bookJpaRepository.findByBookStatus(bookQueryDTO.getBookStatus());
-			if(bookStatusInfos != null) {
+			if(!bookStatusInfos.isEmpty()) {
 				List<BookInfoDTO> bookInfosDTO = transferBookInfoEntityToDTO(bookStatusInfos);
 				bookDTO.getBookList().addAll(bookInfosDTO);
 				queryCount += bookStatusInfos.size();
 			}
 		}else if(type.equals(QueryTypeEnumManager.Name.getValue())) {
 			List<BookInfo> bookJPQLList = bookJpaRepository.findByBookNameLike(bookQueryDTO.getBookName());
-			if(bookJPQLList != null) {
+			if(!bookJPQLList.isEmpty()) {
 				List<BookInfoDTO> bookInfosDTO = transferBookInfoEntityToDTO(bookJPQLList);
 				bookDTO.getBookList().addAll(bookInfosDTO);
 				queryCount+= bookJPQLList.size();
@@ -256,9 +256,11 @@ public class BookServiceImpl implements BookService{
 		
 		List<OverdueBookList> overdueBookLists = new ArrayList<OverdueBookList>();
 		List<BookInfo> bookInfos = bookJpaRepository.findByBookStatus(BookStatusEnum.Status2.getCode());
-		if(bookInfos == null) {
+		//當沒有撈到東西時會回傳一個空list而非null所以下面判斷是要改成isEmpty
+		if(bookInfos.isEmpty()) {
 			responseObject.setRETURNCODE(ReturnCodeEnum.As_SUSS.getCode());
 			responseObject.setRETURNDESC(ReturnCodeEnum.As_SUSS.getDesc());
+			overdueBookDTO.setMWHEADER(responseObject);
 			overdueBookDTO.setQueryCount(0);
 			overdueBookDTO.setOverDueQueryList(null);
 			return overdueBookDTO;
@@ -281,16 +283,18 @@ public class BookServiceImpl implements BookService{
 			overdueBookList.setBookBorrowerId(bookInfo.getBookBorrowerId());
 			overdueBookList.setBorrowDate(bookInfo.getBorrowDate());
 			LocalDate localDate = LocalDate.now();
-			Duration durationObject = Duration.between(localDate, bookInfo.getBorrowDate());
-			int difference = (int)durationObject.toDays();
+//			Duration durationObject = Duration.between(localDate, bookInfo.getBorrowDate());
+//			int difference = (int)durationObject.toDays();
+// 用上面這個方法時單元測試跑出java.time.temporal.UnsupportedTemporalTypeException: Unsupported unit: Seconds，所以改成下面這個寫法
+			int difference =  Period.between(localDate,bookInfo.getBorrowDate()).getDays();
 			overdueBookList.setOverdueDays(difference);
-			if(difference > overdue)
+			if(difference >= overdue)
 				overdueBookLists.add(overdueBookList);
 		}
 		responseObject.setRETURNCODE(ReturnCodeEnum.As_SUSS.getCode());
 		responseObject.setRETURNDESC(ReturnCodeEnum.As_SUSS.getDesc());
 		overdueBookDTO.setMWHEADER(responseObject);
-		overdueBookDTO.setQueryCount(bookInfos.size());
+		overdueBookDTO.setQueryCount(overdueBookLists.size());
 		overdueBookDTO.setOverDueQueryList(overdueBookLists);
 		
 		return overdueBookDTO;

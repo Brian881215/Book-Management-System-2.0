@@ -2,9 +2,11 @@ package com.cathay.libraryManagement.platform.model;
 
 import java.time.LocalDate;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class OverdueBookList {
 	
 	String bookISBN;
